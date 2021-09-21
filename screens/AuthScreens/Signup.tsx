@@ -1,11 +1,11 @@
 import { Component } from 'react'
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, Image, TextInput, Dimensions, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text,Picker, View, Image, TextInput, Dimensions, TouchableOpacity} from 'react-native';
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { updateEmail, updatePassword , updateUsername , signup} from '../../actions/user'
+import { updateEmail, updatePassword , updateUsername,updateUsertype , signup} from '../../actions/user'
 
 const screenWidth = Dimensions.get("window").width
 const screenHeight = Dimensions.get("window").height
@@ -14,7 +14,9 @@ class Signup extends React.Component {
  
     state = {
       repeat:'', // is the repeat password
+      userRole: 'student'
     }
+    
   onLoginPress = () =>{
     if(this.props.user.password == this.state.repeat && this.props.user.username !== '' ){
       this.props.signup()
@@ -23,6 +25,16 @@ class Signup extends React.Component {
       alert('the passcodes are not identical')
     }
   }
+
+  GetSelectedUserRoleValueItem=(userRole)=>{
+    // Alert.alert(throttlemodeValue)
+    console.warn(userRole,"user changed  role");
+    this.props.updateUsertype(userRole)
+    this.setState({userRole:userRole})
+    console.warn("updated state value",this.state.userRole);
+    }
+
+
   render(){
     return (
       <View style={{   flex: 1,   alignItems: 'center',  }}>
@@ -38,6 +50,28 @@ class Signup extends React.Component {
               onChangeText={input=>this.props.updateUsername(input)}
               value={this.props.user.username}
               />
+
+              <View style={{width:screenWidth*0.9,  marginTop:10, }}>
+                <Text style={{left:15}}>User type</Text>
+              </View>
+              {/* <TextInput 
+              style={{height: 50, width:screenWidth*0.9,  color:'black', paddingHorizontal:20, margin:0, borderRadius:10, borderColor:'grey', borderWidth:1}}
+              placeholderTextColor={'grey'}
+              placeholder={'your usertype'}
+              onChangeText={input=>this.props.updateUsertype(input)}
+              value={this.props.user.usertype}
+              /> */}
+              <Picker
+                  style={{height: 50, width:screenWidth*0.9,  color:'black', paddingHorizontal:20, margin:0, borderRadius:10, borderColor:'grey', borderWidth:1}}
+                //  onValueChange={input=>this.props.updateUsertype(input)}
+                onValueChange={(userRoleValue, userRoleIndex) =>
+                  this.GetSelectedUserRoleValueItem(userRoleValue)}
+                  
+                >
+                 
+                  <Picker.Item label="teacher" value="teacher" />
+                   <Picker.Item label="student" value="student" />
+              </Picker>
               <View style={{width:screenWidth*0.9,  marginTop:10, }}>
                 <Text style={{left:15}}>Email</Text>
               </View>
@@ -90,7 +124,7 @@ class Signup extends React.Component {
 
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ updateEmail, updatePassword , updateUsername , signup}, dispatch)
+  return bindActionCreators({ updateEmail, updatePassword , updateUsername ,updateUsertype, signup}, dispatch)
 }
 const mapStateToProps = (state) => {
   return{

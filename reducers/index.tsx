@@ -18,6 +18,8 @@ const user = (state = {}, action) => {
             return { ...state, password:action.payload}
         case 'UPDATE_USERNAME':
             return { ...state, username:action.payload.toUpperCase().replace(' ', '_')}
+        case 'UPDATE_USERTYPE':
+            return { ...state, usertype:action.payload}
         case 'UPDATE_PHOTO':
             return { ...state, photo: action.payload}
         case 'UPDATE_QUOTE': 

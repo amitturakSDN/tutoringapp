@@ -13,6 +13,9 @@ export const updatePassword = (input) => {
 export const updateUsername = (input) => {
 	return {type:'UPDATE_USERNAME', payload: input}
 }
+export const updateUsertype = (input) => {
+	return {type:'UPDATE_USERTYPE', payload: input}
+}
 
 export const updatePhoto = (input) => {
 	return {type:'UPDATE_PHOTO', payload: input}
@@ -28,7 +31,7 @@ export const updateName = (name) => {
 export const signup = () =>{
 	return async (dispatch, getState) => {
 		try{
-			const { username, email, password, photo } = getState().user
+			const { username, email, password, photo , usertype } = getState().user
 			const response = await firebase.auth().createUserWithEmailAndPassword(email,password)
 
 			if(response.user.uid){
@@ -40,6 +43,7 @@ export const signup = () =>{
 					posts: [],
 					bio: '',
 					likes:0,
+					usertype:usertype,
 					photo: photo,
 					savedPosts:[],
 					followers:[],
