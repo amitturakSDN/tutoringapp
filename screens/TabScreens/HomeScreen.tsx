@@ -34,6 +34,28 @@ class HomeScreen extends React.Component {
     this.props.getPosts();
   };
 
+  handleBackButton = () => {
+    Alert.alert(
+      "Exit App",
+      "Exiting the application?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: () => BackHandler.exitApp(),
+        },
+      ],
+      {
+        cancelable: false,
+      }
+    );
+    return true;
+  };
+
   render() {
     return (
       <SafeAreaView
