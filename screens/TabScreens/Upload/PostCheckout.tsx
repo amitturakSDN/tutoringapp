@@ -8,6 +8,7 @@ import {
   TextInput,
   Dimensions,
   Image,
+  StyleSheet,
 } from "react-native";
 
 import { bindActionCreators } from "redux";
@@ -24,14 +25,7 @@ class PostCheckout extends React.Component {
       <View style={{ flex: 1, backgroundColor: "white", alignItems: "center" }}>
         <Image
           source={require("../../../assets/backgrounds/background-white.jpg")}
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            position: "absolute",
-            zIndex: -1,
-            width: screenWidth,
-            height: screenHeight + 50,
-          }}
+          style={styles.bgImg}
         />
         <TextInput
           placeholderTextColor={"black"}
@@ -39,15 +33,7 @@ class PostCheckout extends React.Component {
           placeholder={"Type in your Title here :)"}
           onChangeText={(input) => this.props.updateTitle(input)}
           value={this.props.post.title}
-          style={{
-            backgroundColor: "rgba(0,0,0,0.05)",
-            fontSize: 20,
-            paddingVertical: 10,
-            paddingHorizontal: 15,
-            margin: 20,
-            width: "95%",
-            borderRadius: 10,
-          }}
+          style={styles.postcheckoutTxtInput}
         />
         <TextInput
           placeholderTextColor={"black"}
@@ -55,24 +41,13 @@ class PostCheckout extends React.Component {
           placeholder={"Type in your description here :)"}
           onChangeText={(input) => this.props.updateDescription(input)}
           value={this.props.post.description}
-          style={{
-            backgroundColor: "rgba(0,0,0,0.05)",
-            fontSize: 20,
-            paddingVertical: 10,
-            paddingHorizontal: 15,
-            margin: 20,
-            width: "95%",
-            borderRadius: 10,
-          }}
+          style={styles.postcheckoutTxtInput}
         />
 
         <View>
           <ScrollView horizontal={true} pagingEnabled={true}>
             {this.props.post.photos?.map((e) => (
-              <Image
-                source={{ uri: e }}
-                style={{ width: screenWidth, height: 360 }}
-              />
+              <Image source={{ uri: e }} style={styles.insideScrollViewImg} />
             ))}
           </ScrollView>
         </View>
@@ -92,3 +67,27 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostCheckout);
+
+const styles = StyleSheet.create({
+  bgImg: {
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    zIndex: -1,
+    width: screenWidth,
+    height: screenHeight + 50,
+  },
+  postcheckoutTxtInput: {
+    backgroundColor: "rgba(0,0,0,0.05)",
+    fontSize: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    margin: 20,
+    width: "95%",
+    borderRadius: 10,
+  },
+  insideScrollViewImg: {
+    width: screenWidth,
+    height: 360,
+  },
+});

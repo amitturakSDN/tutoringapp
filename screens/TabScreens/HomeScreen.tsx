@@ -58,49 +58,21 @@ class HomeScreen extends React.Component {
 
   render() {
     return (
-      <SafeAreaView
-        style={{
-          flex: 1,
-          backgroundColor: "white",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <SafeAreaView style={styles.safeAreaViewStyle}>
         {/* <Image source={require('../../assets/backgrounds/background-white.jpg')} style={{    justifyContent: 'center',     alignItems: 'center', position:'absolute', zIndex:-1, width:screenWidth, height:screenHeight+50,}} /> */}
-        <View
-          style={{
-            height: 60,
-            width: screenWidth,
-            borderBottomColor: "rgba(0,0,0,0.1)",
-            borderBottomWidth: 0.5,
-            justifyContent: "space-between",
-            flexDirection: "row",
-          }}
-        >
+        <View style={styles.mainView}>
           <Image
             source={require("../../assets/images/people-tutor-warrior.png")}
-            style={{ width: 130, height: 60, marginHorizontal: 15 }}
+            style={styles.logoImg}
           />
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "row",
-            }}
-          >
+          <View style={styles.logoutBtnView}>
             <TouchableOpacity
               //   onPress={() => this.props.navigation.navigate("SavedPosts")}
               onPress={() => firebase.auth().signOut()}
             >
               <Image
                 source={require("../../assets/images/logout.png")}
-                style={{
-                  width: 25,
-                  height: 25,
-                  margin: 10,
-                  marginHorizontal: 20,
-                  bottom: 4,
-                }}
+                style={styles.logoutBtnImg}
               />
             </TouchableOpacity>
             {/* <Image source={require('../../assets/images/share.jpg')} style={{width:25,height:25, margin:10, bottom:5}} /> */}
@@ -155,3 +127,37 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
+
+const styles = StyleSheet.create({
+  safeAreaViewStyle: {
+    flex: 1,
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  mainView: {
+    height: 60,
+    width: screenWidth,
+    borderBottomColor: "rgba(0,0,0,0.1)",
+    borderBottomWidth: 0.5,
+    justifyContent: "space-between",
+    flexDirection: "row",
+  },
+  logoImg: {
+    width: 130,
+    height: 60,
+    marginHorizontal: 15,
+  },
+  logoutBtnView: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  logoutBtnImg: {
+    width: 25,
+    height: 25,
+    margin: 10,
+    marginHorizontal: 20,
+    bottom: 4,
+  },
+});

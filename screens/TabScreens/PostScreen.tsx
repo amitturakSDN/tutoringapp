@@ -69,14 +69,7 @@ class PostScreen extends React.Component {
       <SafeAreaView style={{ flex: 1 }}>
         <Image
           source={require("../../assets/backgrounds/background-white.jpg")}
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            position: "absolute",
-            zIndex: -1,
-            width: screenWidth,
-            height: screenHeight,
-          }}
+          style={styles.bgImg}
         />
         <View
           style={
@@ -92,62 +85,37 @@ class PostScreen extends React.Component {
                 }
           }
         >
-          <Text style={{ margin: 10, fontWeight: "bold", fontSize: 22 }}>
-            Create a new post
-          </Text>
+          <Text style={styles.createNewPostTxt}>Create a new post</Text>
           <TouchableOpacity
-            style={{ margin: 10 }}
+            style={styles.uploadView}
             onPress={() => this.uploadPost()}
           >
-            <Text
-              style={{
-                margin: 10,
-                fontWeight: "bold",
-                fontSize: 22,
-                color: "blue",
-              }}
-            >
-              Upload
-            </Text>
+            <Text style={styles.uploadTxt}>Upload</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={{ width: screenWidth, height: 360 }}>
+        <View style={styles.openLibraryView}>
           {this.state.urlChosen == undefined ? (
             <TouchableOpacity
-              style={{
-                width: screenWidth,
-                height: 360,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+              style={styles.touchableOpenLibrary}
               onPress={() => this.openLibrary()}
             >
-              <View
-                style={{
-                  width: 65,
-                  height: 65,
-                  borderRadius: 65 / 2,
-                  backgroundColor: "rgba(0,0,0,0.1)",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ color: "white", fontSize: 40 }}>+</Text>
+              <View style={styles.plusView}>
+                <Text style={styles.plusViewTxt}>+</Text>
               </View>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
               // onPress={alert(this.state.urlChosen)}
-              style={{ width: screenWidth, height: 360 }}
+              style={styles.urlChoosen}
             >
               <Image
                 source={{ uri: this.state.urlChosen }}
-                style={{ width: screenWidth, height: 360 }}
+                style={styles.urlChoosenImg}
               />
               <TouchableOpacity
                 onPress={() => this.removeImage(this.state.urlChosen)}
-                style={{ position: "absolute", bottom: 30, right: 40 }}
+                style={styles.urlChoosenTochableOpacity}
               >
                 <FontAwesome name="trash" color={"black"} size={40} />
               </TouchableOpacity>
@@ -168,43 +136,17 @@ class PostScreen extends React.Component {
           this.props.post.photos?.length == 3 ||
           this.props.post.photos?.length == 0 ? null : (
             <TouchableOpacity
-              style={{
-                width: 95,
-                height: 90,
-                backgroundColor: "rgba(0,0,0,0.1)",
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 12,
-                margin: 10,
-              }}
+              style={styles.touchLibrary}
               onPress={() => this.openLibrary()}
             >
-              <View
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 20,
-                  backgroundColor: "rgba(0,0,0,0.1)",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ color: "white", fontSize: 30 }}>+</Text>
+              <View style={styles.touchLibraryPlusView}>
+                <Text style={styles.touchLibraryPlusTxt}>+</Text>
               </View>
             </TouchableOpacity>
           )}
           {this.props.post.photos?.map((e) => (
             <TouchableOpacity onPress={() => this.changeChosenUrl(e)}>
-              <Image
-                source={{ uri: e }}
-                style={{
-                  width: 95,
-                  height: 90,
-                  backgroundColor: "rgba(0,0,0,0.1)",
-                  borderRadius: 12,
-                  margin: 10,
-                }}
-              />
+              <Image source={{ uri: e }} style={styles.chnageChoosenUrl} />
             </TouchableOpacity>
           ))}
         </View>
@@ -227,3 +169,91 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostScreen);
+
+const styles = StyleSheet.create({
+  bgImg: {
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    zIndex: -1,
+    width: screenWidth,
+    height: screenHeight,
+  },
+  createNewPostTxt: {
+    margin: 10,
+    fontWeight: "bold",
+    fontSize: 22,
+  },
+  uploadView: {
+    margin: 10,
+  },
+  uploadTxt: {
+    margin: 10,
+    fontWeight: "bold",
+    fontSize: 22,
+    color: "blue",
+  },
+  openLibraryView: {
+    width: screenWidth,
+    height: 360,
+  },
+  touchableOpenLibrary: {
+    width: screenWidth,
+    height: 360,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  plusView: {
+    width: 65,
+    height: 65,
+    borderRadius: 65 / 2,
+    backgroundColor: "rgba(0,0,0,0.1)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  plusViewTxt: {
+    color: "white",
+    fontSize: 40,
+  },
+  urlChoosen: {
+    width: screenWidth,
+    height: 360,
+  },
+  urlChoosenImg: {
+    width: screenWidth,
+    height: 360,
+  },
+  urlChoosenTochableOpacity: {
+    position: "absolute",
+    bottom: 30,
+    right: 40,
+  },
+  touchLibrary: {
+    width: 95,
+    height: 90,
+    backgroundColor: "rgba(0,0,0,0.1)",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 12,
+    margin: 10,
+  },
+  touchLibraryPlusView: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "rgba(0,0,0,0.1)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  touchLibraryPlusTxt: {
+    color: "white",
+    fontSize: 30,
+  },
+  chnageChoosenUrl: {
+    width: 95,
+    height: 90,
+    backgroundColor: "rgba(0,0,0,0.1)",
+    borderRadius: 12,
+    margin: 10,
+  },
+});

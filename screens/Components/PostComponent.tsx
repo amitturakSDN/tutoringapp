@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, Image, Dimensions, Text, ScrollView } from "react-native";
+import {
+  View,
+  Image,
+  Dimensions,
+  StyleSheet,
+  Text,
+  ScrollView,
+} from "react-native";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Item } from "react-native-paper/lib/typescript/components/List/List";
@@ -59,19 +66,8 @@ export default class PostComponent extends Component {
 
   render() {
     return (
-      <View style={{ marginBottom: 10 }}>
-        <View
-          style={{
-            width: screenWidth,
-            height: 50,
-            backgroundColor: "white",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            borderBottomColor: "grey",
-            borderBottomWidth: 0.07,
-          }}
-        >
+      <View style={styles.mainView}>
+        <View style={styles.upperTouchableOpacityView}>
           <TouchableOpacity
             onPress={() =>
               this.props.navigation.navigate(
@@ -79,25 +75,14 @@ export default class PostComponent extends Component {
                 this.props.item.uid
               )
             }
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "row",
-            }}
+            style={styles.profileNavigateView}
           >
             <Image
-              //   source={{ uri: this.props.item.photo }}
-              source={require("../../assets/images/usericon.png")}
-              style={{
-                width: 32,
-                height: 32,
-                borderRadius: 32 / 2,
-                margin: 15,
-              }}
+              source={{ uri: this.props.item.photo }}
+              // source={require("../../assets/images/usericon.png")}
+              style={styles.userIcon}
             />
-            <Text style={{ fontWeight: "bold", fontSize: 15 }}>
-              {this.props.item.username}
-            </Text>
+            <Text style={styles.username}>{this.props.item.username}</Text>
           </TouchableOpacity>
           {/* <Text style={{margin:15}}>{moment(this.props.item.date).format('ll')}</Text> */}
 
@@ -107,66 +92,36 @@ export default class PostComponent extends Component {
           /> */}
         </View>
         <View>
-          <Text
-            style={{
-              marginLeft: 25,
-              marginBottom: 12,
-              fontSize: 15,
-              fontWeight: "bold",
-            }}
-          >
-            {this.props.item.title}
-          </Text>
-          <Text
-            style={{ marginHorizontal: 25, marginBottom: 15, fontSize: 13 }}
-          >
-            {this.props.item.description}
-          </Text>
+          <Text style={styles.title}>{this.props.item.title}</Text>
+          <Text style={styles.description}>{this.props.item.description}</Text>
         </View>
         <View>
           <ScrollView horizontal={true} pagingEnabled={true}>
             {this.props.item.photos?.map((e) => (
-              <Image
-                source={{ uri: e }}
-                style={{ width: screenWidth, height: 360 }}
-              />
+              <Image source={{ uri: e }} style={styles.contentImg} />
             ))}
           </ScrollView>
         </View>
 
         {/* This is our bottom bar */}
-        <View
-          style={{
-            width: screenWidth,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            height: 50,
-            alignItems: "center",
-          }}
-        >
-          <View
-            style={{
-              justifyContent: "center",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
+        <View style={styles.bottomBarView}>
+          <View style={styles.likeImgView}>
             <TouchableOpacity onPress={() => this.likePost()}>
               {this.props.item.likes.includes(this.props.user.uid) &&
               this.state.liked == undefined ? (
                 <Image
                   source={require("../../assets/images/likeblue.png")}
-                  style={{ width: 35, height: 35, margin: 10 }}
+                  style={styles.fbBlueLike}
                 />
               ) : this.state.liked == true ? (
                 <Image
                   source={require("../../assets/images/likeblue.png")}
-                  style={{ width: 35, height: 35, margin: 10 }}
+                  style={styles.fbBlueLike}
                 />
               ) : (
                 <Image
                   source={require("../../assets/images/fblike.png")}
-                  style={{ width: 45, height: 45, margin: 10 }}
+                  style={styles.fbLike}
                 />
               )}
             </TouchableOpacity>
@@ -191,9 +146,7 @@ export default class PostComponent extends Component {
                     </TouchableOpacity> */}
         </View>
 
-        <Text
-          style={{ fontWeight: "bold", marginHorizontal: 10, marginTop: 0 }}
-        >
+        <Text style={styles.likeTxt}>
           {this.props.item.likes.length + this.state.numLike} likes
         </Text>
 
@@ -235,10 +188,88 @@ export default class PostComponent extends Component {
             style={{ width: 80, height: 17, margin: 10 }}
           />
         </View> */}
-        <Text style={{ marginHorizontal: 10, color: "grey", marginTop: 5 }}>
+        <Text style={styles.dateTxt}>
           {moment(this.props.item.date).format("ll")}
         </Text>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  mainView: {
+    marginBottom: 10,
+  },
+  upperTouchableOpacityView: {
+    width: screenWidth,
+    height: 50,
+    backgroundColor: "white",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottomColor: "grey",
+    borderBottomWidth: 0.07,
+  },
+  profileNavigateView: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  userIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 32 / 2,
+    margin: 15,
+  },
+  username: {
+    fontWeight: "bold",
+    fontSize: 15,
+  },
+  title: {
+    marginLeft: 25,
+    marginBottom: 12,
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+  description: {
+    marginHorizontal: 25,
+    marginBottom: 15,
+    fontSize: 13,
+  },
+  contentImg: {
+    width: screenWidth,
+    height: 360,
+  },
+  bottomBarView: {
+    width: screenWidth,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    height: 50,
+    alignItems: "center",
+  },
+  likeImgView: {
+    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  fbBlueLike: {
+    width: 35,
+    height: 35,
+    margin: 10,
+  },
+  fbLike: {
+    width: 45,
+    height: 45,
+    margin: 10,
+  },
+  likeTxt: {
+    fontWeight: "bold",
+    marginHorizontal: 10,
+    marginTop: 0,
+  },
+  dateTxt: {
+    marginHorizontal: 10,
+    color: "grey",
+    marginTop: 5,
+  },
+});

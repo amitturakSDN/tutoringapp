@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity, Text } from "react-native";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import TabNavigator from "./TabNavigator";
 import PostCheckout from "../screens/TabScreens/Upload/PostCheckout";
@@ -42,23 +42,13 @@ class MyStack extends React.Component {
             headerTitle: "See your post",
             headerRight: () => (
               <TouchableOpacity
-                style={{ margin: 20, flexDirection: "row" }}
+                style={styles.postCheckoutView}
                 onPress={() =>
                   this.props.uploadPost() ||
                   this.props.navigation.navigate("HomeScreen")
                 }
               >
-                <Text
-                  style={{
-                    color: "blue",
-                    fontWeight: "bold",
-                    fontSize: 22,
-                    marginHorizontal: 5,
-                    bottom: 0,
-                  }}
-                >
-                  POST
-                </Text>
+                <Text style={styles.postCheckoutText}>POST</Text>
                 <FontAwesome
                   name="check"
                   color={"blue"}
@@ -85,3 +75,17 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyStack);
+
+const styles = StyleSheet.create({
+  postCheckoutView: {
+    margin: 20,
+    flexDirection: "row",
+  },
+  postCheckoutText: {
+    color: "blue",
+    fontWeight: "bold",
+    fontSize: 22,
+    marginHorizontal: 5,
+    bottom: 0,
+  },
+});

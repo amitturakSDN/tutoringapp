@@ -3,6 +3,12 @@ import React from "react";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import HomeScreen from "../screens/TabScreens/HomeScreen";
 import PostScreen from "../screens/TabScreens/PostScreen";
+// import {
+//   PostScreen,
+//   NotificationsScreen,
+//   ProfileScreen,
+//   HomeScreen,
+// } from "screens";
 import NotificationsScreen from "../screens/TabScreens/NotificationsScreen";
 import SearchScreen from "../screens/TabScreens/SearchScreen";
 import ProfileScreen from "../screens/TabScreens/ProfileScreen";
@@ -61,7 +67,7 @@ function TabNavigator(props) {
             })} 
             /> */}
 
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={({ route }) => ({
@@ -69,7 +75,7 @@ function TabNavigator(props) {
             <FontAwesome name="user" color={color} size={22} />
           ),
         })}
-      /> */}
+      />
     </Tab.Navigator>
   );
 }

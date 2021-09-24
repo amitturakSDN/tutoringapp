@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
+import { FontAwesome } from "@expo/vector-icons";
 import {
   StyleSheet,
   Text,
@@ -21,13 +22,14 @@ import {
   updateUsertype,
   signup,
 } from "../../actions/user";
-
+import Spinner from "react-native-loading-spinner-overlay";
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 
 class Signup extends React.Component {
   state = {
     repeat: "", // is the repeat password
+    loading: false,
   };
 
   onLoginPress = () => {
@@ -36,6 +38,9 @@ class Signup extends React.Component {
       this.props.user.username !== ""
     ) {
       this.props.signup();
+      this.setState({
+        loading: true,
+      });
       // alert(this.props.user.username)
     } else {
       alert("the passcodes are not identical");
@@ -55,6 +60,7 @@ class Signup extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: "center" }}>
+        <Spinner visible={this.state.loading} />
         <Image
           source={require("../../assets/backgrounds/background-white.jpg")}
           style={styles.backgroundImage}
@@ -81,19 +87,26 @@ class Signup extends React.Component {
               onChangeText={input=>this.props.updateUsertype(input)}
               value={this.props.user.usertype}
               /> */}
-        <SelectDropdown
-          style={styles.textinput}
-          data={this.roles}
-          onSelect={(selectedItem, index) => {
-            this.props.updateUsertype(selectedItem);
-          }}
-          buttonTextAfterSelection={(selectedItem, index) => {
-            return selectedItem;
-          }}
-          rowTextForSelection={(item, index) => {
-            return item;
-          }}
-        />
+        <View style={styles.dropView}>
+          <SelectDropdown
+            data={this.roles}
+            onSelect={(selectedItem, index) => {
+              this.props.updateUsertype(selectedItem);
+            }}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              return selectedItem;
+            }}
+            rowTextForSelection={(item, index) => {
+              return item;
+            }}
+          />
+          <FontAwesome
+            name="caret-down"
+            style={styles.fontDrop}
+            color={"gray"}
+            size={30}
+          />
+        </View>
         <View style={styles.inputlabelView}>
           <Text style={styles.inputlabelText}>Email</Text>
         </View>
@@ -195,6 +208,21 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 20,
+  },
+  dropView: {
+    position: "relative",
+    left: 0,
+    // paddingVertical: 3,
+    paddingEnd: 155,
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  fontDrop: {
+    position: "absolute",
+    right: 20,
   },
 });
 

@@ -15,67 +15,37 @@ import SelectDropdown from "react-native-select-dropdown";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { updateEmail, updatePassword, login } from "../../actions/user";
-
+import Spinner from "react-native-loading-spinner-overlay";
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
 
 class Login extends React.Component {
   // roles = ["student", "teacher"];
+  state = {
+    loading: false,
+  };
 
+  loader = () => {
+    this.setState({
+      loading: true,
+    });
+  };
   render() {
     return (
-      <View style={{ flex: 1, alignItems: "center" }}>
+      <View style={styles.imgView}>
+        <Spinner visible={this.state.loading} />
         {/* <Image source={require('../../assets/backgrounds/back4.jpeg')} style={{   position:'absolute', zIndex:-1, width:screenWidth, height:screenHeight+50}} /> */}
         <Image
           source={require("../../assets/backgrounds/background-white.jpg")}
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            position: "absolute",
-            zIndex: -1,
-            width: screenWidth,
-            height: screenHeight + 50,
-          }}
+          style={styles.bgImg}
         />
-
-        <Text
-          style={{
-            fontSize: 35,
-            fontFamily: "logo-font",
-            marginVertical: 60,
-            color: "#0095f6",
-          }}
-        >
-          Tutoring App
-        </Text>
-
-        <View style={{ marginTop: 100 }}>
-          {/* <SelectDropdown
-            data={this.roles} 
-            onSelect={(selectedItem, index) => {
-              this.props.updateUsertype(selectedItem)
-            }}
-            buttonTextAfterSelection={(selectedItem, index) => {
-              return selectedItem
-            }}
-            rowTextForSelection={(item, index) => {
-              return item
-            }}
-          /> */}
-          <View style={{ width: screenWidth * 0.9, marginTop: 10 }}>
-            <Text style={{ left: 15 }}>Email</Text>
+        <Text style={styles.appHeading}>Tutoring App</Text>
+        <View style={styles.appHeadingBottomView}>
+          <View style={styles.labelView}>
+            <Text style={styles.labelViewTxt}>Email</Text>
           </View>
           <TextInput
-            style={{
-              height: 50,
-              width: screenWidth * 0.9,
-              color: "black",
-              paddingHorizontal: 20,
-              margin: 0,
-              borderRadius: 10,
-              borderColor: "grey",
-              borderWidth: 1,
-            }}
+            style={styles.txtInput}
             placeholderTextColor={"grey"}
             placeholder={"example@example.com"}
             // value={this.props.user.email}
@@ -83,20 +53,11 @@ class Login extends React.Component {
             onChangeText={(input) => this.props.updateEmail(input)}
             value={this.props.user.email}
           />
-          <View style={{ width: screenWidth * 0.9, marginTop: 10 }}>
+          <View style={styles.labelView}>
             <Text style={{ left: 15 }}>Password</Text>
           </View>
           <TextInput
-            style={{
-              height: 50,
-              width: screenWidth * 0.9,
-              color: "black",
-              paddingHorizontal: 20,
-              margin: 0,
-              borderRadius: 10,
-              borderColor: "grey",
-              borderWidth: 1,
-            }}
+            style={styles.txtInput}
             placeholderTextColor={"grey"}
             placeholder={"Passcode123"}
             // value={this.props.user.password}
@@ -106,48 +67,24 @@ class Login extends React.Component {
             secureTextEntry={true}
           />
         </View>
-        <View
-          style={{
-            width: screenWidth,
-            justifyContent: "center",
-            alignItems: "center",
-            margin: 30,
-          }}
-        >
+        <View style={styles.loginView}>
           <TouchableOpacity
-            style={{
-              width: screenWidth * 0.6,
-              height: 50,
-              borderRadius: 30,
-              backgroundColor: "#0095f6",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            onPress={() => this.props.login()}
+            style={styles.loginBtnView}
+            onPress={() => this.props.login() || this.loader()}
           >
-            <Text style={{ color: "white", fontWeight: "bold", fontSize: 20 }}>
-              LOGIN
-            </Text>
+            <Text style={styles.loginBtnTxt}>LOGIN</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{ alignItems: "center", flexDirection: "row", margin: 10 }}
-            onPress={() => this.props.navigation.navigate("Signup")}
+            style={styles.signupBtnView}
+            // onPress={() => this.props.navigation.navigate("Signup")}
+            onPress={() => this.props.navigation.navigate("ProfilePicture")}
           >
-            <Text style={{ fontSize: 18 }}>Don't have an account? </Text>
-            <Text
-              style={{ fontSize: 18, fontWeight: "bold", color: "#0095f6" }}
-            >
-              Signup!
+            <Text style={styles.dontHaveAnAccountTxt}>
+              Don't have an account?{" "}
             </Text>
+            <Text style={styles.signupBtnTxt}>Signup!</Text>
           </TouchableOpacity>
-          <View
-            style={{
-              position: "absolute",
-              top: 250,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <View style={styles.bottomSignupBtnView}>
             {/* <Text style={{fontSize:18}}>from</Text> */}
             {/* <Text style={{fontSize:20, fontWeight:'bold'}}> xyz</Text> */}
           </View>
@@ -167,3 +104,82 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
+
+const styles = StyleSheet.create({
+  imgView: {
+    flex: 1,
+    alignItems: "center",
+  },
+  bgImg: {
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    zIndex: -1,
+    width: screenWidth,
+    height: screenHeight + 50,
+  },
+  appHeading: {
+    fontSize: 35,
+    fontFamily: "logo-font",
+    marginVertical: 60,
+    color: "#0095f6",
+  },
+  appHeadingBottomView: {
+    marginTop: 100,
+  },
+  labelView: {
+    width: screenWidth * 0.9,
+    marginTop: 10,
+  },
+  labelViewTxt: {
+    left: 15,
+  },
+  txtInput: {
+    height: 50,
+    width: screenWidth * 0.9,
+    color: "black",
+    paddingHorizontal: 20,
+    margin: 0,
+    borderRadius: 10,
+    borderColor: "grey",
+    borderWidth: 1,
+  },
+  loginView: {
+    width: screenWidth,
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 30,
+  },
+  loginBtnView: {
+    width: screenWidth * 0.6,
+    height: 50,
+    borderRadius: 30,
+    backgroundColor: "#0095f6",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loginBtnTxt: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+  signupBtnView: {
+    alignItems: "center",
+    flexDirection: "row",
+    margin: 10,
+  },
+  dontHaveAnAccountTxt: {
+    fontSize: 18,
+  },
+  signupBtnTxt: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#0095f6",
+  },
+  bottomSignupBtnView: {
+    position: "absolute",
+    top: 250,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});

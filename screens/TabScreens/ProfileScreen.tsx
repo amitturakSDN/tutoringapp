@@ -49,121 +49,57 @@ class ProfileScreen extends React.Component {
 
     if (params == undefined || params == this.props.user.uid) {
       return (
-        <ScrollView
-          style={{ flex: 1, backgroundColor: "white", height: screenHeight }}
-        >
-          <SafeAreaView style={{ flex: 1 }}>
-            <View
-              style={{
-                width: "100%",
-                height: 120,
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                backgroundColor: "white",
-              }}
-            >
+        <ScrollView style={styles.scrollview}>
+          <SafeAreaView style={styles.safeareaview}>
+            <View style={styles.mainView}>
               <Image
                 source={{ uri: this.props.user?.photo }}
-                style={{ width: 90, height: 90, borderRadius: 45, margin: 20 }}
+                style={styles.userPhoto}
               />
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <View
-                  style={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    margin: 20,
-                  }}
-                >
-                  <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+              <View style={styles.upperPostView}>
+                <View style={styles.postsView}>
+                  <Text style={styles.postsViewTxt}>
                     {this.props.user?.posts?.length}
                   </Text>
-                  <Text style={{ fontSize: 15 }}>Posts</Text>
+                  <Text>Posts</Text>
                 </View>
-                <View
-                  style={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    margin: 20,
-                  }}
-                >
-                  <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                {/* <View style={styles.postsView}>
+                  <Text style={styles.postsViewTxt}>
                     {this.props.user?.followers?.length}
                   </Text>
-                  <Text style={{ fontSize: 15 }}>Followers</Text>
+                  <Text style={styles.postsViewTxtt}>Followers</Text>
                 </View>
-                <View
-                  style={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    margin: 20,
-                  }}
-                >
-                  <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                <View style={styles.postsView}>
+                  <Text style={styles.postsViewTxt}>
                     {this.props.user?.following?.length}
                   </Text>
-                  <Text style={{ fontSize: 15 }}>Following</Text>
-                </View>
+                  <Text style={styles.postsViewTxtt}>Following</Text>
+                </View> */}
               </View>
             </View>
-            <View
-              style={{ paddingHorizontal: 20, width: "100%", marginBottom: 20 }}
-            >
-              <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-                {this.props.user?.email}
-              </Text>
+            <View style={styles.logoutView}>
+              <Text style={styles.emailTxt}>{this.props.user?.email}</Text>
               <Text>{this.props.user?.bio}</Text>
               <TouchableOpacity
-                style={{ marginLeft: 270 }}
+                style={styles.logoutTouchableopacity}
                 onPress={() => firebase.auth().signOut()}
               >
-                <Text style={{ color: "blue" }}>Logout</Text>
+                <Text style={styles.logoutTxt}>Logout</Text>
               </TouchableOpacity>
             </View>
 
-            <View
-              style={{
-                height: 60,
-                width: "100%",
-                flexDirection: "row",
-                justifyContent: "center",
-              }}
-            >
+            <View style={styles.editView}>
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate("Edit")}
-                style={{
-                  width: "90%",
-                  height: 35,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: 7,
-                  borderWidth: 1,
-                  borderColor: "grey",
-                }}
+                style={styles.editProfileView}
               >
-                <Text
-                  style={{ color: "black", fontSize: 19, fontWeight: "bold" }}
-                >
-                  Edit profile
-                </Text>
+                <Text style={styles.editProfileTxt}>Edit profile</Text>
               </TouchableOpacity>
             </View>
 
             {this.props.user?.posts?.length <= 0 ? (
-              <View
-                style={{
-                  height: 60,
-                  width: "100%",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                }}
-              >
-                <Text style={{ color: "black", fontSize: 19 }}>
+              <View style={styles.noDataView}>
+                <Text style={styles.noDataTxt}>
                   No Data Has Been Uploaded yet
                 </Text>
               </View>
@@ -177,10 +113,7 @@ class ProfileScreen extends React.Component {
                   <TouchableOpacity onPress={() => this.goToPost(item)}>
                     <Image
                       source={{ uri: item.photos[0] }}
-                      style={{
-                        width: screenWidth / 3,
-                        height: screenWidth / 3,
-                      }}
+                      style={styles.goToPostImg}
                     />
                   </TouchableOpacity>
                 )}
@@ -380,3 +313,96 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);
+
+const styles = StyleSheet.create({
+  scrollview: {
+    flex: 1,
+    backgroundColor: "white",
+    height: screenHeight,
+  },
+  safeareaview: {
+    flex: 1,
+  },
+  mainView: {
+    width: "100%",
+    height: 120,
+    flexDirection: "row",
+    // justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "white",
+  },
+  userPhoto: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    margin: 20,
+  },
+  upperPostView: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  postsView: {
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 20,
+  },
+  postsViewTxt: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  postsViewTxtt: {
+    fontSize: 15,
+  },
+  followersView: {
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 20,
+  },
+  logoutView: {
+    paddingHorizontal: 20,
+    width: "100%",
+    marginBottom: 20,
+  },
+  emailTxt: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  logoutTouchableopacity: {
+    marginLeft: 270,
+  },
+  logoutTxt: { color: "blue" },
+  editView: {
+    height: 60,
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  editProfileView: {
+    width: "90%",
+    height: 35,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 7,
+    borderWidth: 1,
+    borderColor: "grey",
+  },
+  editProfileTxt: {
+    color: "black",
+    fontSize: 19,
+    fontWeight: "bold",
+  },
+  noDataView: {
+    height: 60,
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  noDataTxt: {
+    color: "black",
+    fontSize: 19,
+  },
+  goToPostImg: {
+    width: screenWidth / 3,
+    height: screenWidth / 3,
+  },
+});
