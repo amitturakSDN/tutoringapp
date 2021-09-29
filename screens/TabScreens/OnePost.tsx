@@ -1,28 +1,16 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  TouchableOpacity,
-  FlatList,
-  Dimensions,
-  Image,
-} from "react-native";
-
+import { StyleSheet, Dimensions } from "react-native";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { getUser } from "../../actions/user";
+import { getUser } from "@actions/user";
 import {
   getPosts,
   likePost,
   unLikePost,
   savePost,
   unSavePost,
-} from "../../actions/post";
-
-import PostComponent from "../Components/PostComponent";
-import { SafeAreaView } from "react-native-safe-area-context";
+} from "@actions/post";
+import PostComponent from "@Components/PostComponent";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;

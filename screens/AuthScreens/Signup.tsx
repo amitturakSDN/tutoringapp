@@ -1,11 +1,8 @@
-import { Component } from "react";
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import {
   StyleSheet,
   Text,
-  Picker,
   View,
   Image,
   TextInput,
@@ -21,7 +18,7 @@ import {
   updateUsername,
   updateUsertype,
   signup,
-} from "../../actions/user";
+} from "@actions/user";
 import Spinner from "react-native-loading-spinner-overlay";
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;

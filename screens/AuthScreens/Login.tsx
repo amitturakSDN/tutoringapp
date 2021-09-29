@@ -1,5 +1,3 @@
-import { Component } from "react";
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import {
   StyleSheet,
@@ -11,14 +9,12 @@ import {
   Dimensions,
   Image,
 } from "react-native";
-import SelectDropdown from "react-native-select-dropdown";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { updateEmail, updatePassword, login } from "../../actions/user";
+import { updateEmail, updatePassword, login } from "@actions/user";
 import Spinner from "react-native-loading-spinner-overlay";
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
-
 class Login extends React.Component {
   // roles = ["student", "teacher"];
   state = {
@@ -70,7 +66,10 @@ class Login extends React.Component {
         <View style={styles.loginView}>
           <TouchableOpacity
             style={styles.loginBtnView}
-            onPress={() => this.props.login() || this.loader()}
+            onPress={() => {
+              this.props.login();
+              this.loader();
+            }}
           >
             <Text style={styles.loginBtnTxt}>LOGIN</Text>
           </TouchableOpacity>

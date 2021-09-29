@@ -1,21 +1,9 @@
-import { Component } from "react";
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  TouchableOpacity,
-  TextInput,
-  Dimensions,
-  Image,
-} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import * as firebase from "firebase";
-
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { getUser } from "../../actions/user";
+import { getUser } from "@actions/user";
 
 class Login extends React.Component {
   componentDidMount = () => {

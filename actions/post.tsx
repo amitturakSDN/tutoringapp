@@ -67,7 +67,7 @@ export const uploadPost = () => {
         .update({
           posts: firebase.firestore.FieldValue.arrayUnion(id),
         });
-      this.props.navigation.navigate("HomeScreen");
+      // return this.props.navigation.navigate("HomeScreen");
     } catch (e) {
       alert(e);
     }
@@ -90,6 +90,7 @@ export const getPosts = (numberOfPosts) => {
     dispatch({ type: "GET_POSTS", payload: array });
   };
 };
+
 export const getSavedPosts = (numberOfPosts) => {
   return async (dispatch, getState) => {
     try {

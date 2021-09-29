@@ -1,7 +1,22 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
+    "baseUrl": ".",
     "strict": true,
-    "jsx": "react"
-  }
+    "jsx": "react",
+    "paths": {
+      "@navigation/*": ["./navigation/*"],
+      "@Components/*": ["./screens/Components/*"],
+      "@TabScreens/*": ["./screens/TabScreens/*"],
+      "@AuthScreens/*": ["./screens/AuthScreens/*"],
+      "@Upload*": ["./screens/TabScreens/Upload/*"],
+      "@HeaderScreens*": ["./screens/TabScreens/HeaderScreens/*"],
+      "@actions*": ["./actions/*"],
+      "@Constants*": ["./helpers/*"],
+      
+    }
+    }
 }
+
+
+

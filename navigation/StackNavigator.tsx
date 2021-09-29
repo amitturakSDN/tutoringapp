@@ -1,17 +1,17 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import TabNavigator from "./TabNavigator";
-import PostCheckout from "../screens/TabScreens/Upload/PostCheckout";
-import SavedPosts from "../screens/TabScreens/HeaderScreens/SavedPosts";
-import ProfileScreen from "../screens/TabScreens/ProfileScreen";
-import OnePost from "../screens/TabScreens/OnePost";
-import Edit from "../screens/TabScreens/Edit";
 
+import TabNavigator from "@navigation/TabNavigator";
+import PostCheckout from "@Upload/PostCheckout";
+import SavedPosts from "@HeaderScreens/SavedPosts";
+import ProfileScreen from "@TabScreens/ProfileScreen";
+import OnePost from "@TabScreens/OnePost";
+import Edit from "@TabScreens/Edit";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { FontAwesome } from "@expo/vector-icons";
-import { uploadPost } from "../actions/post";
+import { uploadPost } from "@actions/post";
 
 const Stack = createStackNavigator();
 
@@ -43,10 +43,10 @@ class MyStack extends React.Component {
             headerRight: () => (
               <TouchableOpacity
                 style={styles.postCheckoutView}
-                onPress={() =>
-                  this.props.uploadPost() ||
-                  this.props.navigation.navigate("HomeScreen")
-                }
+                onPress={() => {
+                  this.props.uploadPost();
+                  this.props.navigation.push("HomeScreen");
+                }}
               >
                 <Text style={styles.postCheckoutText}>POST</Text>
                 <FontAwesome

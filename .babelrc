@@ -1,0 +1,32 @@
+{
+    "presets": ["module:metro-react-native-babel-preset"],
+    "plugins": [
+      [
+        "module-resolver",
+        {
+          "root": ["./"],
+          "extensions": [
+            ".ios.ts",
+            ".android.ts",
+            ".ts",
+            ".ios.tsx",
+            ".android.tsx",
+            ".tsx",
+            ".jsx",
+            ".js",
+            ".json"
+          ],
+          "alias": {
+             "@navigation": "./navigation",
+            "@TabScreens": "./screens/TabScreens",
+            "@AuthScreens": "./screens/AuthScreens",
+            "@Components": "./screens/Components",
+            "@Upload":"./screens/TabScreens/Upload",
+            "@HeaderScreens":"./screens/TabScreens/HeaderScreens",
+            "@actions":"./actions",
+            "@constants":"./helpers"
+          }
+        }
+      ]
+    ]
+  }

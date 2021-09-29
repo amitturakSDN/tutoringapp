@@ -19,7 +19,7 @@ const user = (state = {}, action) => {
     case "UPDATE_USERNAME":
       return {
         ...state,
-        username: action.payload.toUpperCase().replace(" ", "_"),
+        username: action.payload,
       };
     case "UPDATE_USERTYPE":
       return { ...state, usertype: action.payload };

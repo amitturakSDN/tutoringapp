@@ -1,7 +1,6 @@
 import { Component } from "react";
 import React from "react";
-import SwitchNavigator from "./navigation/LoginNavigator";
-
+import SwitchNavigator from "@navigation/LoginNavigator";
 import thunkMiddleware from "redux-thunk";
 import reducer from "./reducers/index";
 import { Provider } from "react-redux";

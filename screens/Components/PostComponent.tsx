@@ -8,8 +8,6 @@ import {
   ScrollView,
 } from "react-native";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { Item } from "react-native-paper/lib/typescript/components/List/List";
 import moment from "moment";
 import { TouchableOpacity } from "react-native-gesture-handler";
 

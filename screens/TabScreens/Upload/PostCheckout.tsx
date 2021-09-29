@@ -1,21 +1,15 @@
 import React from "react";
 import {
   ScrollView,
-  Text,
   View,
-  Button,
-  TouchableOpacity,
   TextInput,
   Dimensions,
   Image,
   StyleSheet,
 } from "react-native";
-
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-
-import { updateDescription, updateTitle } from "../../../actions/post";
-
+import { updateDescription, updateTitle } from "@actions/post";
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 

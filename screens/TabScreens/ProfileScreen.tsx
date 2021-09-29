@@ -3,21 +3,17 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   TouchableOpacity,
-  TextInput,
   Dimensions,
   Image,
 } from "react-native";
-
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { getUser, followUser, unFollowUser } from "../../actions/user";
-import { getPost } from "../../actions/post";
+import { getUser, followUser, unFollowUser } from "@actions/user";
+import { getPost } from "@actions/post";
 import * as firebase from "firebase";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 

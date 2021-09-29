@@ -1,38 +1,36 @@
 import React from "react";
 import {
   StyleSheet,
-  Text,
   View,
-  Button,
   TouchableOpacity,
   FlatList,
   Dimensions,
   Image,
 } from "react-native";
 import * as firebase from "firebase";
-import { NavigationContainer } from "@react-navigation/native";
-import { createDrawerNavigator } from "@react-navigation/drawer";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { getUser } from "../../actions/user";
+import { getUser } from "@actions/user";
 import {
   getPosts,
   likePost,
   unLikePost,
   savePost,
   unSavePost,
-} from "../../actions/post";
-
-import PostComponent from "../Components/PostComponent";
+} from "@actions/post";
+import PostComponent from "@Components/PostComponent";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 
 class HomeScreen extends React.Component {
-  componentDidMount = () => {
+  constructor(props) {
+    super(props);
     this.props.getPosts();
-  };
+  }
+  // componentDidMount = () => {
+  //   this.props.getPosts();
+  // };
 
   handleBackButton = () => {
     Alert.alert(
@@ -59,17 +57,13 @@ class HomeScreen extends React.Component {
   render() {
     return (
       <SafeAreaView style={styles.safeAreaViewStyle}>
-        {/* <Image source={require('../../assets/backgrounds/background-white.jpg')} style={{    justifyContent: 'center',     alignItems: 'center', position:'absolute', zIndex:-1, width:screenWidth, height:screenHeight+50,}} /> */}
         <View style={styles.mainView}>
           <Image
             source={require("../../assets/images/people-tutor-warrior.png")}
             style={styles.logoImg}
           />
           <View style={styles.logoutBtnView}>
-            <TouchableOpacity
-              //   onPress={() => this.props.navigation.navigate("SavedPosts")}
-              onPress={() => firebase.auth().signOut()}
-            >
+            <TouchableOpacity onPress={() => firebase.auth().signOut()}>
               <Image
                 source={require("../../assets/images/logout.png")}
                 style={styles.logoutBtnImg}
@@ -79,7 +73,6 @@ class HomeScreen extends React.Component {
           </View>
         </View>
 
-        {/* {this.props.post.feed?.length > 0 ? ( */}
         <FlatList
           data={this.props.post.feed}
           keyExtractor={(item) => JSON.stringify(item.uid)}
@@ -95,19 +88,6 @@ class HomeScreen extends React.Component {
             />
           )}
         />
-        {/* ) : (
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "row",
-            }}
-          >
-            <Text style={{ color: "black", fontSize: 19 }}>
-              No Data Has To Show
-            </Text>
-          </View>
-        )} */}
       </SafeAreaView>
     );
   }

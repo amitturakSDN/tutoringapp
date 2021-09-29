@@ -1,18 +1,9 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  TouchableOpacity,
-  TextInput,
-  Dimensions,
-  Image,
-} from "react-native";
+import { StyleSheet, Text, View, Dimensions, Image } from "react-native";
 
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { getUser } from "../../actions/user";
+import { getUser } from "@actions/user";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;

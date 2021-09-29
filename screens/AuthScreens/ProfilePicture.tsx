@@ -1,29 +1,27 @@
-import { Component } from "react";
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import {
   StyleSheet,
   Text,
   View,
   Image,
-  TextInput,
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
-
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-
-import { uploadPhoto } from "../../actions/index";
-import { updatePhoto } from "../../actions/user";
+import { uploadPhoto } from "@actions/index";
+import Spinner from "react-native-loading-spinner-overlay";
+import { updatePhoto } from "@actions/user";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 
 class ProfilePicture extends React.Component {
+  state = {
+    loading: false,
+  };
   openLibrary = async () => {
     try {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -31,6 +29,11 @@ class ProfilePicture extends React.Component {
         const image = await ImagePicker.launchImageLibraryAsync({
           allowsEditing: true,
         });
+        if (image) {
+          setTimeout(() => {
+            this.setState({ loading: true });
+          }, 800);
+        }
         if (!image.cancelled) {
           const url = await this.props.uploadPhoto(image);
           this.props.updatePhoto(url);
@@ -44,6 +47,7 @@ class ProfilePicture extends React.Component {
   render() {
     return (
       <View style={styles.profileView}>
+        <Spinner visible={this.state.loading} />
         <Image
           source={require("../../assets/backgrounds/background-white.jpg")}
           style={styles.bgImg}
@@ -52,12 +56,21 @@ class ProfilePicture extends React.Component {
           <Text style={styles.chooseProfileTxt}>Choose a profile picture</Text>
           {this.props.user.photo == undefined ? (
             <TouchableOpacity onPress={() => this.openLibrary()}>
-              <View style={styles.openLibraryView} />
+              <View style={styles.openLibraryView}>
+                <Image
+                  source={require("../../assets/images/camera.png")}
+                  style={styles.camera}
+                />
+              </View>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity onPress={() => this.openLibrary()}>
               <Image
                 source={{ uri: this.props.user.photo }}
+                onLoadStart={() => this.setState({ loading: true })}
+                onLoadEnd={() => {
+                  this.setState({ loading: false });
+                }}
                 style={styles.openLibraryView}
               />
             </TouchableOpacity>
@@ -67,6 +80,14 @@ class ProfilePicture extends React.Component {
             onPress={() => this.props.navigation.push("Signup")}
           >
             <Text style={styles.continueTxt}>Continue</Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          <TouchableOpacity
+            style={styles.signupBtnView}
+            onPress={() => this.props.navigation.push("Signup")}
+          >
+            <Text style={styles.continueTxt}>Skip</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -127,5 +148,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 24,
     color: "black",
+  },
+  camera: {
+    width: 110,
+    height: 80,
+    position: "absolute",
+    top: 50,
+    left: 40,
   },
 });

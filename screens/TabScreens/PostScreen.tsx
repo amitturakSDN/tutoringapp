@@ -5,19 +5,26 @@ import {
   View,
   Image,
   TouchableOpacity,
-  TextInput,
   Dimensions,
   SafeAreaView,
   Platform,
-  ImagePickerIOS,
+  ScrollView,
+  TextInput,
 } from "react-native";
 import * as Permissions from "expo-permissions";
+import Spinner from "react-native-loading-spinner-overlay";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { getUser } from "../../actions/user";
+import { getUser } from "@actions/user";
 import * as ImagePicker from "expo-image-picker";
-import { uploadPhoto } from "../../actions/index";
-import { updateNextPhoto, removeImage } from "../../actions/post";
+import { uploadPhoto } from "@actions/index";
+import {
+  updateNextPhoto,
+  removeImage,
+  updateDescription,
+  updateTitle,
+  uploadPost,
+} from "@actions/post";
 import { FontAwesome } from "@expo/vector-icons";
 
 const screenWidth = Dimensions.get("window").width;
@@ -26,7 +33,9 @@ const screenHeight = Dimensions.get("window").height;
 class PostScreen extends React.Component {
   state = {
     urlChosen: undefined,
+    loading: false,
   };
+
   openLibrary = async () => {
     try {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -34,6 +43,11 @@ class PostScreen extends React.Component {
         const image = await ImagePicker.launchImageLibraryAsync({
           allowsEditing: true,
         });
+        if (image) {
+          setTimeout(() => {
+            this.setState({ loading: true });
+          }, 800);
+        }
         if (!image.cancelled) {
           // const url = await this.props.uploadPhoto(image)
           const url = await this.props.uploadPhoto(image);
@@ -54,6 +68,12 @@ class PostScreen extends React.Component {
   removeImage = (url) => {
     const position = this.props.post.photos.indexOf(url);
     this.props.removeImage(position);
+    setTimeout(() => {
+      this.setState({ loading: true });
+    }, 500);
+    setTimeout(() => {
+      this.setState({ loading: false });
+    }, 1000);
     if (this.props.post.photos.length == 2) {
       this.setState({ urlChosen: this.props.post.photos[0] });
     } else {
@@ -61,12 +81,22 @@ class PostScreen extends React.Component {
     }
   };
 
-  uploadPost = () => {
-    this.props.navigation.navigate("PostCheckout");
+  upload = () => {
+    this.props.uploadPost();
+    this.props.navigation.navigate("Home");
+    // xx.then((responseData) => {
+    //   if (typeof responseData != "string") {
+    //     // alert("test = " + responseData);
+    //     this.props.navigation.navigate("HomeScreen");
+    //   } else {
+    //     alert(responseData);
+    //   }
+    // });
   };
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
+        <Spinner visible={this.state.loading} />
         <Image
           source={require("../../assets/backgrounds/background-white.jpg")}
           style={styles.bgImg}
@@ -88,68 +118,103 @@ class PostScreen extends React.Component {
           <Text style={styles.createNewPostTxt}>Create a new post</Text>
           <TouchableOpacity
             style={styles.uploadView}
-            onPress={() => this.uploadPost()}
+            onPress={() => this.upload()}
           >
             <Text style={styles.uploadTxt}>Upload</Text>
           </TouchableOpacity>
         </View>
+        <ScrollView>
+          <View style={{}}>
+            <TextInput
+              placeholderTextColor={"black"}
+              numberOfLines={3}
+              placeholder={"Type in your Title here :)"}
+              onChangeText={(input) => this.props.updateTitle(input)}
+              value={this.props.post.title}
+              style={styles.postcheckoutTxtInput}
+            />
+            <TextInput
+              placeholderTextColor={"black"}
+              numberOfLines={7}
+              placeholder={"Type in your description here :)"}
+              onChangeText={(input) => this.props.updateDescription(input)}
+              value={this.props.post.description}
+              style={styles.postcheckoutTxtInput}
+            />
+          </View>
 
-        <View style={styles.openLibraryView}>
-          {this.state.urlChosen == undefined ? (
-            <TouchableOpacity
-              style={styles.touchableOpenLibrary}
-              onPress={() => this.openLibrary()}
-            >
-              <View style={styles.plusView}>
-                <Text style={styles.plusViewTxt}>+</Text>
-              </View>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              // onPress={alert(this.state.urlChosen)}
-              style={styles.urlChoosen}
-            >
-              <Image
-                source={{ uri: this.state.urlChosen }}
-                style={styles.urlChoosenImg}
-              />
+          <View style={styles.openLibraryView}>
+            {this.state.urlChosen == undefined ? (
               <TouchableOpacity
-                onPress={() => this.removeImage(this.state.urlChosen)}
-                style={styles.urlChoosenTochableOpacity}
+                style={styles.touchableOpenLibrary}
+                onPress={() => this.openLibrary()}
               >
-                <FontAwesome name="trash" color={"black"} size={40} />
+                <Text style={{ marginVertical: 10 }}>
+                  Upload Image(optional)
+                </Text>
+                <View style={styles.plusView}>
+                  <Text style={styles.plusViewTxt}>+</Text>
+                </View>
               </TouchableOpacity>
-            </TouchableOpacity>
-          )}
-        </View>
+            ) : (
+              <TouchableOpacity
+                // onPress={alert(this.state.urlChosen)}
+                style={styles.urlChoosen}
+              >
+                <Image
+                  source={{ uri: this.state.urlChosen }}
+                  onLoadStart={() => this.setState({ loading: true })}
+                  onLoadEnd={() => {
+                    this.setState({ loading: false });
+                  }}
+                  style={styles.urlChoosenImg}
+                />
+                <TouchableOpacity
+                  onPress={() => this.removeImage(this.state.urlChosen)}
+                  style={styles.urlChoosenTochableOpacity}
+                >
+                  <FontAwesome name="trash" color={"black"} size={40} />
+                </TouchableOpacity>
+              </TouchableOpacity>
+            )}
+          </View>
 
-        <View
-          style={{
-            flexDirection: "row",
-            width: screenWidth,
-            justifyContent: "center",
-            alignItems: "center",
-            flex: 1,
-          }}
-        >
-          {this.props.post.photos == undefined ||
-          this.props.post.photos?.length == 3 ||
-          this.props.post.photos?.length == 0 ? null : (
-            <TouchableOpacity
-              style={styles.touchLibrary}
-              onPress={() => this.openLibrary()}
-            >
-              <View style={styles.touchLibraryPlusView}>
-                <Text style={styles.touchLibraryPlusTxt}>+</Text>
-              </View>
-            </TouchableOpacity>
-          )}
-          {this.props.post.photos?.map((e) => (
-            <TouchableOpacity onPress={() => this.changeChosenUrl(e)}>
-              <Image source={{ uri: e }} style={styles.chnageChoosenUrl} />
-            </TouchableOpacity>
-          ))}
-        </View>
+          <View
+            style={{
+              flexDirection: "row",
+              width: screenWidth,
+              justifyContent: "center",
+              alignItems: "center",
+              flex: 1,
+            }}
+          >
+            {this.props.post.photos == undefined ||
+            this.props.post.photos?.length == 3 ||
+            this.props.post.photos?.length == 0 ? null : (
+              <TouchableOpacity
+                style={styles.touchLibrary}
+                onPress={() => this.openLibrary()}
+              >
+                <View style={styles.touchLibraryPlusView}>
+                  <Text style={styles.touchLibraryPlusTxt}>+</Text>
+                </View>
+              </TouchableOpacity>
+            )}
+            {this.props.post.photos?.map((e) => (
+              <TouchableOpacity onPress={() => this.changeChosenUrl(e)}>
+                <Image source={{ uri: e }} style={styles.chnageChoosenUrl} />
+              </TouchableOpacity>
+            ))}
+          </View>
+          {/* <View>
+          <TouchableOpacity
+            style={styles.skipBtnView}
+            onPress={() => this.props.navigation.push("Signup")}
+          >
+            <Text style={styles.skipTxt}>Skip</Text>
+          </TouchableOpacity>
+        </View> */}
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -157,7 +222,15 @@ class PostScreen extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
-    { getUser, uploadPhoto, updateNextPhoto, removeImage },
+    {
+      uploadPost,
+      getUser,
+      uploadPhoto,
+      updateNextPhoto,
+      removeImage,
+      updateDescription,
+      updateTitle,
+    },
     dispatch
   );
 };
@@ -194,6 +267,7 @@ const styles = StyleSheet.create({
     color: "blue",
   },
   openLibraryView: {
+    // marginTop: 30,
     width: screenWidth,
     height: 360,
   },
@@ -221,7 +295,7 @@ const styles = StyleSheet.create({
   },
   urlChoosenImg: {
     width: screenWidth,
-    height: 360,
+    height: 160,
   },
   urlChoosenTochableOpacity: {
     position: "absolute",
@@ -255,5 +329,27 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.1)",
     borderRadius: 12,
     margin: 10,
+  },
+  skipBtnView: {
+    margin: 25,
+    padding: 20,
+    borderRadius: 14,
+    backgroundColor: "rgba(0,0,0,0.05)",
+    width: screenWidth * 0.9,
+    alignItems: "center",
+  },
+  skipTxt: {
+    fontWeight: "bold",
+    fontSize: 24,
+    color: "black",
+  },
+  postcheckoutTxtInput: {
+    backgroundColor: "rgba(0,0,0,0.05)",
+    fontSize: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    margin: 20,
+    width: "95%",
+    borderRadius: 10,
   },
 });
